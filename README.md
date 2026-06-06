@@ -26,7 +26,7 @@ Built on **ROS2 Jazzy**, **Raspberry Pi 4B**, **ESP32**, and **YDLidar X2** — 
 
 | RViz2 Visualisation |
 |:-------------------:|
-| ![RViz](Images/rviz_simulation.png) |
+| ![RViz](Images/rviz_simulation.jpeg) |
 
 ---
 
