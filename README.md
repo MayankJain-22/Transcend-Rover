@@ -22,11 +22,11 @@ Built on **ROS2 Jazzy**, **Raspberry Pi 4B**, **ESP32**, and **YDLidar X2** — 
 
 | Rover Build | Hardware Mount |
 |:-----------:|:--------------:|
-| ![Rover](Images/rover_build.jpg) | ![Mount](Images/hardware_mount.jpg) |
+| ![Rover](Images/rover_build.jpeg) | ![Mount](Images/hardware_mount.jpeg) |
 
-| Gazebo Simulation | RViz2 Visualisation |
-|:-----------------:|:-------------------:|
-| ![Gazebo](Images/gazebo_sim.png) | ![RViz](Images/rviz_simulation.png) |
+| RViz2 Visualisation |
+|:-------------------:|
+| ![RViz](Images/rviz_simulation.jpeg) |
 
 ---
 
@@ -126,22 +126,22 @@ Phases 1–5 establish the verified motion and simulation foundation. Phase 6 is
 │                                                                  │
 │  /cmd_vel (Twist)                                                │
 │       ↓                                                          │
-│  diff_drive_controller ─────────────── /joint_states            │
-│       ↓  (4× wheel velocity rad/s)           ↑                  │
-│  TranscendHardwareInterface      joint_state_broadcaster        │
-│       ↓  /wheel_vel_cmd [FL,FR,RL,RR]   ↑  /wheel_vel_state    │
+│  diff_drive_controller ───────────────  /joint_states            │
+│       ↓  (4× wheel velocity rad/s)            ↑                  │
+│  TranscendHardwareInterface       joint_state_broadcaster        │
+│       ↓  /wheel_vel_cmd [FL,FR,RL,RR]     ↑  /wheel_vel_state    │
 │  micro_ros_agent (UDP port 8888)         │                       │
 │                                          │                       │
 │  YDLidar X2 driver ──→ /scan             │                       │
 │  robot_state_publisher ──→ /tf           │                       │
-└──────────────────┬───────────────────────┼──────────────────────┘
-                   │ WiFi UDP             │ WiFi UDP
+└──────────────────┬───────────────────────┼───────────────────────┘
+                   │ WiFi UDP              │ WiFi UDP
 ┌──────────────────▼───────────────────────┴──────────────────────┐
-│                  ESP32 (micro-ROS node: transcend_esp32)         │
-│                                                                  │
+│                  ESP32 (micro-ROS node: transcend_esp32)        │
+│                                                                 │
 │  Subscriber: /wheel_vel_cmd  → float32[FL, FR, RL, RR] rad/s    │
 │  Publisher:  /wheel_vel_state ← float32[FL, FR, RL, RR] rad/s   │
-│                                                                  │
+│                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │  PID loop — 50 Hz (20ms interval)                       │    │
 │  │  • Direction-aware quadrature encoder ISRs              │    │
@@ -149,9 +149,9 @@ Phases 1–5 establish the verified motion and simulation foundation. Phase 6 is
 │  │  • Direction-change integrator reset                    │    │
 │  │  • 2s watchdog — stops motors if ROS2 comms lost        │    │
 │  └─────────────────────────────────────────────────────────┘    │
-│                                                                  │
+│                                                                 │
 │  Agent state machine: WAITING_WIFI → WAITING_AGENT → CONNECTED  │
-└──────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -396,7 +396,10 @@ Transcend-Rover/
 │   └── transcend_esp32_microros/
 │       └── transcend_esp32_microros.ino  ← micro-ROS firmware (full ROS2 node)
 │
-├── Images/                              ← Add rover photos + screenshots
+├── Images/
+│   ├── hardware_mount.jpeg
+│   ├── rover_build.jpeg
+│   └── rviz_simulation.jpeg       
 │
 └── Docs/
     └── PHASES.md                        ← 10-phase development tracker
@@ -433,11 +436,11 @@ See [`Docs/PHASES.md`](Docs/PHASES.md) for the full detailed phase breakdown.
 ## 👤 Author
 
 **Mayank Jain**
-Robotics and Automation Engineer — B.Tech, Bharati Vidyapeeth (Deemed to be University), Pune
+Robotics and Automation Engineer 
 
 > *ROS2 architecture, ros2_control hardware interface plugin, URDF modelling, Gazebo simulation, micro-ROS ESP32 firmware, physical hardware build and wiring — all designed and built from scratch.*
 
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/YOUR_USERNAME)
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/MayankJain-22)
 
 ---
 
