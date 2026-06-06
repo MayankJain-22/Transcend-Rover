@@ -392,11 +392,11 @@ See [`Docs/PHASES.md`](Docs/PHASES.md) for the full detailed phase breakdown.
 ## 👤 Author
 
 **Mayank Jain**
-Robotics and Automation Engineer — B.Tech, Bharati Vidyapeeth (Deemed to be University), Pune
+Robotics and Automation Engineer
 
 > *ROS2 architecture, hardware interface plugin, URDF modelling, Gazebo simulation, ESP32 firmware, physical hardware build — all designed and built from scratch.*
 
-[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/YOUR_USERNAME)
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/MayankJain-22)
 
 ---
 
