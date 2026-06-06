@@ -9,7 +9,7 @@ This document tracks build progress. Updated as each milestone is reached.
 
 - [x] 4WD chassis built with real measured dimensions
 - [x] N20 encoder motors mounted — 4 wheels with quadrature encoders
-- [x] TB6612FNG H-bridge motor drivers wired
+- [x] TB6612FNG H-bridge motor drivers wired (front + rear pair)
 - [x] Custom hardware mount built from scratch — camera, LiDAR, and Raspberry Pi all housed
 - [x] Filter circuit + power management for 5V and 3.3V rails
 - [x] Li-Po battery power system
@@ -38,7 +38,7 @@ This document tracks build progress. Updated as each milestone is reached.
 - [x] Background spin thread handles subscriber callbacks and publisher
 - [x] `on_activate()` / `on_deactivate()` lifecycle hooks implemented
 - [x] Custom `WheelVelocity.msg` — `/wheel_vel_cmd` and `/wheel_vel_state`
-- [x] `diff_drive_controller` receiving `/cmd_vel` → 4 wheel velocity targets
+- [x] `diff_drive_controller` receiving `/cmd_vel` → 4 wheel velocity targets in rad/s
 - [x] `joint_state_broadcaster` publishing encoder feedback
 - [x] `use_stamped_vel: false` — standard `Twist` compatible with Nav2 and teleop
 
@@ -74,9 +74,16 @@ This document tracks build progress. Updated as each milestone is reached.
 
 Getting the full stack running on the physical rover — Pi 4B + ESP32 + YDLidar all talking to each other reliably.
 
-- [x] ESP32 PID firmware working — 98% straight-line motion achieved
-- [x] ESP32 WiFi web interface working (standalone mode)
-- [ ] micro-ROS UDP bridge stable between Pi 4B and ESP32
+- [x] ESP32 micro-ROS firmware written and flashed
+  - Full ROS2 node (`transcend_esp32`) running on microcontroller over WiFi UDP
+  - Direction-aware quadrature encoder ISRs (signed tick counting)
+  - PWM deadband (30/255) to overcome static friction at low speeds
+  - PID integrator reset on direction reversal
+  - 2s watchdog — motors stop if `/wheel_vel_cmd` stops arriving
+  - Agent state machine: `WAITING_WIFI → WAITING_AGENT → AGENT_CONNECTED`
+  - Bug fixes: executor spin window 1ms → 15ms, agent ping non-blocking (100ms, 1 attempt)
+- [x] 98% straight-line motion achieved under PID control
+- [ ] micro-ROS UDP bridge stable between Pi 4B and ESP32 under full ROS2 load
 - [ ] YDLidar X2 stable on Pi 4B at `/dev/ttyUSB0`
 - [ ] Full launch — all nodes running simultaneously on real rover
 - [ ] `/cmd_vel` from teleop keyboard controlling real wheels end-to-end

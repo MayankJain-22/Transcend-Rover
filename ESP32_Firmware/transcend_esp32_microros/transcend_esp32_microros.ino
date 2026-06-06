@@ -35,7 +35,7 @@
 // ================================================================
 const char* WIFI_SSID     = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-const char* AGENT_IP      = "10.76.148.50";
+const char* AGENT_IP      = "YOUR_AGENT_IP";
 const int   AGENT_PORT    = 8888;
 
 // ================================================================
