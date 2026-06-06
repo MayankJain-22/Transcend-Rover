@@ -22,7 +22,7 @@ Built on **ROS2 Jazzy**, **Raspberry Pi 4B**, **ESP32**, and **YDLidar X2** — 
 
 | Rover Build | Hardware Mount |
 |:-----------:|:--------------:|
-| ![Rover](Images/rover_build.jpg) | ![Mount](Images/hardware_mount.jpg) |
+| ![Rover](Images/rover_build.jpeg) | ![Mount](Images/hardware_mount.jpeg) |
 
 | Gazebo Simulation | RViz2 Visualisation |
 |:-----------------:|:-------------------:|
