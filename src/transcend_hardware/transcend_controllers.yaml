@@ -1,0 +1,82 @@
+# ================================================================
+#  transcend_controllers.yaml
+#
+#  Controller Manager configuration for Transcend robot.
+#  Place in: transcend_bringup/config/transcend_controllers.yaml
+#
+#  Controllers:
+#    1. joint_state_broadcaster — reads hw_states and publishes
+#       /joint_states for robot_state_publisher (TF tree)
+#
+#    2. diff_drive_controller — subscribes /cmd_vel, computes
+#       per-wheel rad/s targets, and publishes /odom
+# ================================================================
+
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz — matches ESP32 PID rate
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+# ----------------------------------------------------------------
+#  diff_drive_controller parameters
+#  UPDATE wheel_radius and wheel_separation from your URDF!
+# ----------------------------------------------------------------
+diff_drive_controller:
+  ros__parameters:
+
+    # ---- Joints — must match URDF joint names exactly ----
+    # 4-wheel differential drive: front and rear wheels on each side
+    # are linked (same velocity target)
+    left_wheel_names:  ["fl_wheel_joint", "rl_wheel_joint"]
+    right_wheel_names: ["fr_wheel_joint", "rr_wheel_joint"]
+
+    # ---- Physical dimensions — UPDATE from your URDF ----
+    wheel_separation: 0.23    # meters, left-to-right wheel center distance
+    wheel_radius:     0.0375  # meters, wheel radius
+
+    # ---- Velocity limits ----
+    # Set based on your MAX_SPEED_TICKS / TICKS_PER_RAD:
+    # max_rad_s = MAX_SPEED_TICKS / TICKS_PER_RAD = 2865 / 222 ≈ 12.9 rad/s
+    # max_linear = max_rad_s * wheel_radius = 12.9 * 0.0375 ≈ 0.48 m/s
+    linear.x.max_velocity:  0.4   # m/s (conservative — tune up if stable)
+    linear.x.min_velocity: -0.4
+    angular.z.max_velocity:  2.0  # rad/s
+    angular.z.min_velocity: -2.0
+
+    # ---- Acceleration limits (important for smooth Nav2 control) ----
+    linear.x.max_acceleration:  0.5   # m/s²
+    linear.x.min_acceleration: -0.5
+    angular.z.max_acceleration:  1.0  # rad/s²
+    angular.z.min_acceleration: -1.0
+
+    # ---- Odometry ----
+    # open_loop: false = use encoder feedback for odometry (correct for us)
+    open_loop: false
+
+    # How odom is computed: "wheels" = from encoder ticks directly
+    # This is standard for wheeled robots
+    odom_frame_id:   odom
+    base_frame_id:   base_footprint   # must match URDF root link
+
+    # Publish odom → base_footprint TF
+    enable_odom_tf: true
+
+    # Odometry covariance (increase if odometry is noisy)
+    pose_covariance_diagonal:     [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal:    [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    # ---- cmd_vel topic ----
+    # Nav2 publishes to /cmd_vel by default — use that
+    # (or remap here if needed)
+    cmd_vel_topic: /cmd_vel
+
+    # Publish velocity feedback on /odom
+    publish_rate: 50.0  # Hz
+
+    # ---- Timeout: stop motors if no cmd_vel received ----
+    cmd_vel_timeout: 0.5  # seconds — matches ESP32 watchdog

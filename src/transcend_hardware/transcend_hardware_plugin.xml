@@ -1,0 +1,12 @@
+<library path="transcend_hardware">
+  <class
+    name="transcend_hardware/TranscendHardwareInterface"
+    type="transcend_hardware::TranscendHardwareInterface"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Hardware interface for Transcend 4WD robot.
+      Communicates with ESP32 via micro_ROS UDP topics
+      (/wheel_vel_cmd and /wheel_vel_state).
+    </description>
+  </class>
+</library>

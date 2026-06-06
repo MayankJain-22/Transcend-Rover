@@ -1,0 +1,25 @@
+ydlidar_ros2_driver_node:
+  ros__parameters:
+    port: /dev/ttyUSB0        # X2 direct port (single USB device, no udev needed)
+    frame_id: laser_frame     # must match URDF laser_joint child link
+    ignore_array: ""
+    baudrate: 115200          # X2 = 115200
+    lidar_type: 1             # TYPE_TRIANGLE
+    device_type: 0            # YDLIDAR_TYPE_SERIAL
+    sample_rate: 3            # X2 = 3kHz
+    abnormal_check_count: 4
+    fixed_resolution: false   # X2 does not have fixed angular resolution
+    reversion: false          # set true if scan appears mirrored front/back
+    inverted: false           # set true if scan appears mirrored left/right
+    auto_reconnect: true
+    isSingleChannel: true     # X2 is single channel
+    intensity: false
+    intensity_bit: 0
+    support_motor_dtr: true
+    angle_max: 180.0
+    angle_min: -180.0
+    range_max: 8.0            # X2 max range is 8m
+    range_min: 0.12
+    frequency: 10.0
+    invalid_range_is_inf: false
+    debug: false

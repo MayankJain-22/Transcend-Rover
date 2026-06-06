@@ -1,0 +1,64 @@
+<!--
+  ================================================================
+  ros2_control block for Transcend rover
+  
+  ADD this entire block inside your <robot> tag in rover.urdf.xacro
+  (or directly in mobile_base.xacro, before the closing </robot>).
+  
+  Joint names match your actual URDF:
+    base_front_left_wheel_joint
+    base_front_right_wheel_joint
+    base_rear_left_wheel_joint
+    base_rear_right_wheel_joint
+  
+  These also update the joint_names_ array and controller yaml.
+  ================================================================
+-->
+
+<ros2_control name="TranscendHardware" type="system">
+
+  <hardware>
+    <plugin>transcend_hardware/TranscendHardwareInterface</plugin>
+  </hardware>
+
+  <!-- Front-left wheel -->
+  <joint name="base_front_left_wheel_joint">
+    <command_interface name="velocity">
+      <param name="min">-12.9</param>
+      <param name="max"> 12.9</param>
+    </command_interface>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <!-- Front-right wheel -->
+  <joint name="base_front_right_wheel_joint">
+    <command_interface name="velocity">
+      <param name="min">-12.9</param>
+      <param name="max"> 12.9</param>
+    </command_interface>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <!-- Rear-left wheel -->
+  <joint name="base_rear_left_wheel_joint">
+    <command_interface name="velocity">
+      <param name="min">-12.9</param>
+      <param name="max"> 12.9</param>
+    </command_interface>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <!-- Rear-right wheel -->
+  <joint name="base_rear_right_wheel_joint">
+    <command_interface name="velocity">
+      <param name="min">-12.9</param>
+      <param name="max"> 12.9</param>
+    </command_interface>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+</ros2_control>

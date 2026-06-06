@@ -1,0 +1,50 @@
+<launch>
+
+  <let name="urdf_path"
+       value="$(find-pkg-share transcend_description)/urdf/rover.urdf.xacro" />
+
+  <let name="controllers_config"
+       value="$(find-pkg-share transcend_bringup)/config/transcend_controllers.yaml" />
+
+  <!-- 1. robot_state_publisher -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+    <param name="robot_description"
+           value="$(command 'xacro $(var urdf_path)')" />
+    <param name="use_sim_time" value="false" />
+  </node>
+
+  <!-- 2. ros2_control controller manager -->
+  <node pkg="controller_manager" exec="ros2_control_node" output="screen">
+    <param name="robot_description"
+           value="$(command 'xacro $(var urdf_path)')" />
+    <param from="$(var controllers_config)" />
+    <param name="use_sim_time" value="false" />
+  </node>
+
+  <!-- 3. joint_state_broadcaster -->
+  <node pkg="controller_manager" exec="spawner" output="screen"
+        args="joint_state_broadcaster
+              --controller-manager /controller_manager
+              --controller-manager-timeout 30" />
+
+  <!-- 4. diff_drive_controller -->
+  <node pkg="controller_manager" exec="spawner" output="screen"
+      args="diff_drive_controller
+            --controller-manager /controller_manager
+            --controller-manager-timeout 30
+            --param-file $(var controllers_config)" />            
+
+  <!-- 5. YDLidar driver
+       IMPORTANT: do NOT set name="..." here.
+       The node's default name is "ydlidar_ros2_driver_node" which must
+       match the top-level key in ydlidar_x4.yaml for params to load. -->
+  <node pkg="ydlidar_ros2_driver" exec="ydlidar_ros2_driver_node" output="screen">
+    <param from="$(find-pkg-share transcend_bringup)/config/ydlidar_x4.yaml" />
+  </node>
+
+  <!-- 6. micro_ros_agent -->
+  <node pkg="micro_ros_agent" exec="micro_ros_agent"
+        name="micro_ros_agent" output="screen"
+        args="udp4 --port 8888" />
+
+</launch>
