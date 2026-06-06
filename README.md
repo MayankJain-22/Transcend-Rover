@@ -267,7 +267,7 @@ The ESP32 runs as a **full ROS2 node** using micro-ROS over WiFi UDP. It is not 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Transcend-Rover.git
+git clone https://github.com/MayankJain-22/Transcend-Rover.git
 cd Transcend-Rover
 ```
 
