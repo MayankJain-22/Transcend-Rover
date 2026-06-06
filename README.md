@@ -356,7 +356,7 @@ Transcend-Rover/
 │   └── transcend_esp32_pid/
 │       └── transcend_esp32_pid.ino  ← ESP32 PID + WiFi + OTA firmware
 │
-├── Images/                          ← Add rover photos + screenshots
+├── Images/                          
 │
 └── Docs/
     └── PHASES.md                    ← 10-phase development tracker
