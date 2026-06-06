@@ -1,12 +1,12 @@
 # 🤖 Transcend — ROS2 Autonomous Routine-Enforcing Rover
 
-> **⚠️ Active Development — Phase 4 of 8 complete.**
-> This repository is a living project. New phases are pushed as they're completed.
+> **⚠️ Active Development — Phase 5 complete, Phase 6 (hardware integration) in progress.**
+> This repository is a living project. Phases are pushed as milestones are completed.
 > See [`Docs/PHASES.md`](Docs/PHASES.md) for the full roadmap.
 
-A 4WD autonomous rover built to **help people who want to help themselves** — enforcing daily routines, detecting doom-scrolling, and physically interrupting unproductive behaviour by driving up to the user and giving a real-world cue.
+A 4WD autonomous rover built to **help people who want to help themselves** — enforcing daily schedules, detecting doom-scrolling, and physically driving to the user as a real-world interruption cue.
 
-Built on **ROS2 Jazzy**, **Raspberry Pi 5**, **ESP32**, and **YDLidar X2** — everything from the hardware chassis to the ROS2 control stack was designed and built from scratch.
+Built on **ROS2 Jazzy**, **Raspberry Pi 4B**, **ESP32**, and **YDLidar X2** — every layer from the physical chassis to the ROS2 control stack was designed and built from scratch.
 
 ---
 
@@ -18,30 +18,30 @@ Built on **ROS2 Jazzy**, **Raspberry Pi 5**, **ESP32**, and **YDLidar X2** — e
 
 ## 📸 Project Photos
 
-> Add your rover photos to the `Images/` folder.
+> Add your photos to the `Images/` folder and update paths below.
 
-| Rover Build | RViz2 Simulation |
-|:-----------:|:----------------:|
-| ![Rover](Images/rover_build.jpg) | ![RViz](Images/rviz_simulation.png) |
+| Rover Build | Hardware Mount |
+|:-----------:|:--------------:|
+| ![Rover](Images/rover_build.jpg) | ![Mount](Images/hardware_mount.jpg) |
 
-| Gazebo Simulation | Hardware Wiring |
-|:-----------------:|:---------------:|
-| ![Gazebo](Images/gazebo_sim.png) | ![Wiring](Images/hardware_wiring.jpg) |
+| Gazebo Simulation | RViz2 Visualisation |
+|:-----------------:|:-------------------:|
+| ![Gazebo](Images/gazebo_sim.png) | ![RViz](Images/rviz_simulation.png) |
 
 ---
 
 ## 💡 What is Transcend?
 
-Most productivity tools are passive — they send you a notification you dismiss in 2 seconds. Transcend is **physical**. When you're doom-scrolling past your scheduled work time, it drives to you. You can't swipe it away.
+Most productivity tools are passive — you dismiss the notification in 2 seconds. Transcend is **physical**. When you're doom-scrolling past your scheduled work time, it drives to you. You can't swipe it away.
 
 The rover enforces routines by:
 - Monitoring your schedule and detecting when you're off-track
 - Detecting excessive phone screen time
 - **Driving to your location** and providing a physical interruption cue
 - Assisting with sleep and wake-up routines
-- Doing none of this for people who don't want it — opt-in only
+- Doing none of this for people who don't want it — **opt-in by design**
 
-Phase 1–4 of this project establishes the verified motion and navigation foundation. Phase 7 implements the behaviour intelligence layer.
+Phases 1–5 establish the verified motion and simulation foundation. Phase 6 is integrating everything on real hardware. Phase 7 brings the behaviour intelligence.
 
 ---
 
@@ -49,14 +49,16 @@ Phase 1–4 of this project establishes the verified motion and navigation found
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| 1 | Hardware build — 4WD chassis, N20 encoders, ESP32 PID | ✅ Complete |
+| 1 | Hardware build — 4WD chassis, N20 encoders, filter circuit, custom mount | ✅ Complete |
 | 2 | ROS2 workspace + URDF robot description | ✅ Complete |
-| 3 | ros2_control hardware interface (RT-safe) | ✅ Complete |
+| 3 | ros2_control hardware interface plugin (C++, RT-safe) | ✅ Complete |
 | 4 | Bringup launch + YDLidar + micro-ROS bridge | ✅ Complete |
-| 5 | Gazebo Harmonic simulation | 🔄 In Progress |
-| 6 | Nav2 navigation + SLAM mapping | 🔲 Planned |
-| 7 | Transcend behaviour layer (schedule, doom-scroll, sleep) | 🔲 Planned |
-| 8 | Full system integration + mobile app | 🔲 Planned |
+| 5 | Gazebo Harmonic simulation | ✅ Complete |
+| 6 | Real hardware integration — Pi 4B + ESP32 + LiDAR running together | 🔄 In Progress |
+| 7 | SLAM Toolbox + Nav2 autonomous navigation | 🔲 Planned |
+| 8 | Transcend behaviour layer — schedule enforcement, doom-scroll detection | 🔲 Planned |
+| 9 | AI/ML integration — person tracking, computer vision | 🔲 Planned |
+| 10 | Full system integration + mobile companion app | 🔲 Planned |
 
 ---
 
@@ -64,12 +66,13 @@ Phase 1–4 of this project establishes the verified motion and navigation found
 
 - ✅ Real rover drives in **98% straight line** under PID wheel speed control
 - ✅ `diff_drive_controller` receives `/cmd_vel` → splits to 4 independent wheel targets
-- ✅ Live encoder feedback published back to ROS2 via `/wheel_vel_state`
+- ✅ Encoder feedback published back to ROS2 via `/wheel_vel_state`
 - ✅ Full URDF with real physical dimensions (measured from actual rover)
-- ✅ Gazebo differential drive simulation running
+- ✅ **Gazebo Harmonic simulation fully working** — differential drive, joint states, LiDAR
 - ✅ YDLidar X2 scan publishing on `/scan` topic
 - ✅ RViz2 visualising robot model and LiDAR scan in real time
 - ✅ Single launch file brings up the entire ROS2 stack on Raspberry Pi
+- 🔄 Full hardware stack integration currently in progress
 
 ---
 
@@ -82,32 +85,33 @@ Phase 1–4 of this project establishes the verified motion and navigation found
 | **ROS2 Jazzy** | Robot middleware — nodes, topics, services, actions |
 | **ros2_control** | Real-time hardware abstraction layer |
 | **diff_drive_controller** | Differential drive kinematics + velocity control |
-| **Gazebo Harmonic** | Physics simulation |
+| **Gazebo Harmonic** | Physics simulation ✅ working |
 | **RViz2** | Sensor and robot model visualisation |
 | **micro-ROS** | ROS2 on embedded ESP32 (UDP transport) |
-| **SLAM Toolbox** *(planned)* | Simultaneous localisation and mapping |
-| **Nav2** *(planned)* | Autonomous navigation stack |
+| **SLAM Toolbox** | Simultaneous localisation and mapping *(Phase 7)* |
+| **Nav2** | Autonomous navigation stack *(Phase 7)* |
 
 ### Languages
 
 | Language | Used For |
 |----------|---------|
 | **C++** | ros2_control hardware interface plugin |
-| **Python** | ROS2 nodes, behaviour layer *(planned)* |
+| **Python** | ROS2 utility nodes, behaviour layer *(Phase 8)* |
 | **XML / xacro** | URDF robot description, launch files |
 | **YAML** | Controller config, sensor parameters |
+| **Arduino C++** | ESP32 PID firmware + WiFi web interface |
 
 ### Hardware
 
 | Component | Details |
 |-----------|---------|
-| Raspberry Pi 5 | Main compute — runs full ROS2 stack |
-| ESP32 | Motor controller — runs PID + micro-ROS UDP bridge |
+| **Raspberry Pi 4B** | Main compute — runs full ROS2 Jazzy stack |
+| **ESP32** | Motor controller — PID + micro-ROS UDP bridge |
 | N20 Encoder Motors ×4 | Geared DC motors with quadrature encoders |
 | TB6612FNG H-Bridge ×2 | Motor driver ICs |
 | YDLidar X2 | 360° 2D LiDAR — 8m range, 10Hz |
-| Camera Module | Visual input *(Phase 7)* |
-| Custom Hardware Mount | Aluminium/acrylic base built from scratch |
+| Camera Module | Visual input *(Phase 9)* |
+| Custom Hardware Mount | Built from scratch — camera, LiDAR, and Pi all mounted |
 | Filter Circuit | RC filter + power management for 5V/3.3V rails |
 | Li-Po Battery | Main power supply |
 
@@ -116,30 +120,31 @@ Phase 1–4 of this project establishes the verified motion and navigation found
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Raspberry Pi 5 (ROS2 Jazzy)              │
-│                                                             │
-│  /cmd_vel (Twist)                                           │
-│      ↓                                                      │
-│  diff_drive_controller ──────────── /joint_states           │
-│      ↓  (wheel velocity targets)         ↑                  │
-│  TranscendHardwareInterface    joint_state_broadcaster      │
-│      ↓  /wheel_vel_cmd              ↑  /wheel_vel_state     │
-│  micro_ros_agent (UDP:8888)         │                       │
-│                                     │                       │
-│  YDLidar X2 ──→ /scan               │                       │
-│  robot_state_publisher ──→ /tf      │                       │
-└──────────────────┬──────────────────┼───────────────────────┘
-                   │ UDP              │ UDP
-┌──────────────────▼──────────────────┴───────────────────────┐
-│                      ESP32 (micro-ROS)                      │
-│                                                             │
-│  Subscribes: /wheel_vel_cmd  → PID setpoints                │
-│  Publishes:  /wheel_vel_state ← encoder feedback            │
-│                                                             │
-│  PID loop per wheel (20Hz) — N20 encoder motors ×4          │
-│  TB6612FNG H-bridge driver ×2                               │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                   Raspberry Pi 4B (ROS2 Jazzy)                   │
+│                                                                  │
+│  /cmd_vel (Twist)                                                │
+│       ↓                                                          │
+│  diff_drive_controller ─────────────── /joint_states            │
+│       ↓  (wheel velocity targets)            ↑                  │
+│  TranscendHardwareInterface      joint_state_broadcaster        │
+│       ↓  /wheel_vel_cmd               ↑  /wheel_vel_state       │
+│  micro_ros_agent (UDP:8888)           │                         │
+│                                       │                         │
+│  YDLidar X2 ──────────→ /scan         │                         │
+│  robot_state_publisher ──→ /tf        │                         │
+└──────────────────┬────────────────────┼─────────────────────────┘
+                   │ UDP               │ UDP
+┌──────────────────▼────────────────────┴─────────────────────────┐
+│                      ESP32 (micro-ROS)                           │
+│                                                                  │
+│  Subscribes: /wheel_vel_cmd  → PID setpoints per wheel           │
+│  Publishes:  /wheel_vel_state ← encoder feedback per wheel       │
+│                                                                  │
+│  Independent PID loop per wheel (20Hz)                           │
+│  TB6612FNG H-bridge driver ×2                                    │
+│  N20 encoder motors ×4                                           │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -147,17 +152,17 @@ Phase 1–4 of this project establishes the verified motion and navigation found
 ## 📦 ROS2 Packages
 
 ### `transcend_description`
-URDF/xacro robot model built from real measured dimensions.
+URDF/xacro robot model built from real measured rover dimensions.
 
 | File | Description |
 |------|-------------|
-| `rover.urdf.xacro` | Top-level robot file — includes all sub-files |
-| `mobile_base.xacro` | Full robot geometry — links, joints, inertia, ros2_control block |
+| `rover.urdf.xacro` | Top-level robot file |
+| `mobile_base.xacro` | Full geometry — links, joints, inertia, ros2_control block |
 | `common_properties.xacro` | Reusable inertia macros (box, cylinder, sphere) |
 | `rover_gaz.xacro` | Gazebo Harmonic plugins (diff drive + joint state publisher) |
-| `ros2_control_snippet.xacro` | Reference snippet for ros2_control block |
+| `ros2_control_snippet.xacro` | ros2_control hardware block |
 
-**Key dimensions (measured from real rover):**
+**Real measured dimensions:**
 
 | Parameter | Value |
 |-----------|-------|
@@ -173,36 +178,45 @@ URDF/xacro robot model built from real measured dimensions.
 Custom `ros2_control` `SystemInterface` plugin — the bridge between ROS2 and ESP32.
 
 **Key design decisions:**
-- `write()` runs on the **RT (real-time) thread** — must never block. It deposits velocity commands into `pending_cmd_` protected by a mutex and sets `new_cmd_pending_` atomic flag.
-- A **single background thread** does two things: spins the ROS2 executor to receive `/wheel_vel_state` callbacks, and publishes `/wheel_vel_cmd` when the flag is set. DDS network I/O never touches the RT thread.
-- Anti-pattern avoided: never calling `publish()` from `write()` directly (would cause RT jitter).
+- `write()` is on the **RT thread** — it only deposits velocity commands into `pending_cmd_` behind a mutex and sets an atomic flag. It never blocks.
+- A **single background thread** handles both DDS subscriber callbacks (receiving `/wheel_vel_state`) and publisher calls (sending `/wheel_vel_cmd`). Network I/O never touches the RT thread.
+- This avoids the common anti-pattern of calling `publish()` directly from `write()`, which causes RT jitter.
 
 | File | Description |
 |------|-------------|
 | `include/transcend_hardware_interface.hpp` | Class declaration — 4-joint SystemInterface |
-| `src/transcend_hardware_interface.cpp` | Full implementation |
-| `WheelVelocity.msg` | Custom message: `fl fr rl rr` float32 fields |
-| `transcend_hardware_plugin.xml` | pluginlib export declaration |
-
-**Topics:**
-
-| Topic | Direction | Type | Description |
-|-------|-----------|------|-------------|
-| `/wheel_vel_cmd` | Pi → ESP32 | `Float32MultiArray` | Velocity setpoints [FL, FR, RL, RR] rad/s |
-| `/wheel_vel_state` | ESP32 → Pi | `Float32MultiArray` | Actual encoder velocities [FL, FR, RL, RR] rad/s |
+| `src/transcend_hardware_interface.cpp` | Full RT-safe implementation |
+| `WheelVelocity.msg` | Custom message: fl fr rl rr float32 fields |
+| `transcend_hardware_plugin.xml` | pluginlib export |
 
 ---
 
 ### `transcend_bringup`
-Launch files and configuration that bring up the full rover stack.
+Single launch file that starts the entire rover stack.
 
 | File | Description |
 |------|-------------|
-| `launch/rover_pi.launch.xml` | Main launch — runs everything on Pi |
-| `config/transcend_controllers.yaml` | diff_drive_controller tuning + limits |
-| `config/ydlidar_x4.yaml` | YDLidar X2 sensor config |
-| `config/gazebo_bridge.yaml` | ROS↔Gazebo topic bridge mappings |
-| `config/transcend_config.rviz` | RViz2 saved config |
+| `launch/rover_pi.launch.xml` | Starts everything — RSP, controller manager, LiDAR, micro-ROS agent |
+| `config/transcend_controllers.yaml` | diff_drive_controller gains + limits |
+| `config/ydlidar_x4.yaml` | YDLidar X2 sensor parameters |
+| `config/gazebo_bridge.yaml` | ROS ↔ Gazebo topic bridge |
+| `config/transcend_config.rviz` | Saved RViz2 configuration |
+
+---
+
+### `ESP32_Firmware` (this repo)
+Arduino firmware running on the ESP32 motor controller.
+
+| Feature | Details |
+|---------|---------|
+| PID control | Independent per wheel, 20Hz update rate |
+| WiFi web interface | D-pad controller served from ESP32 flash |
+| Live telemetry | Target speed, actual speed, PWM per motor in browser |
+| Live PID tuning | Adjust Kp/Ki/Kd from browser without re-flashing |
+| OTA updates | Re-flash wirelessly after first USB upload |
+| Encoder calibration | Serial command `M` measures MAX_SPEED_TICKS automatically |
+
+> ⚠️ **Before uploading:** fill in `YOUR_WIFI_SSID`, `YOUR_WIFI_PASSWORD`, and `YOUR_OTA_PASSWORD` at the top of the `.ino` file.
 
 ---
 
@@ -214,8 +228,8 @@ Launch files and configuration that bring up the full rover stack.
 |-------------|---------|
 | Ubuntu | 24.04 LTS |
 | ROS2 | Jazzy Jalisco |
-| micro-ROS | Jazzy |
 | Gazebo | Harmonic |
+| ESP32 Arduino Core | 3.x |
 
 ### 1. Clone the Repository
 
@@ -232,28 +246,26 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### 3. Install Additional Dependencies
+### 3. Install Additional Packages
 
 ```bash
-# ros2_control
+# ros2_control stack
 sudo apt install ros-jazzy-ros2-control ros-jazzy-ros2-controllers
 
-# diff_drive_controller
+# diff_drive_controller + joint_state_broadcaster
 sudo apt install ros-jazzy-diff-drive-controller ros-jazzy-joint-state-broadcaster
 
 # micro-ROS agent
 sudo apt install ros-jazzy-micro-ros-agent
 
-# YDLidar ROS2 driver
-# Clone into src/ — see: https://github.com/YDLIDAR/ydlidar_ros2_driver
-cd src && git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git
-cd ..
-
-# Gazebo Harmonic + bridge
+# Gazebo Harmonic + ROS bridge
 sudo apt install ros-jazzy-ros-gz-sim ros-jazzy-ros-gz-bridge
+
+# YDLidar ROS2 driver
+cd src && git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git && cd ..
 ```
 
-### 4. Build the Workspace
+### 4. Build
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -261,32 +273,17 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-### 5. Launch on Real Rover (Raspberry Pi)
-
-Connect the YDLidar to `/dev/ttyUSB0` and power on the ESP32 with micro-ROS firmware.
+### 5. Launch on Real Rover (Raspberry Pi 4B)
 
 ```bash
 source install/setup.bash
 ros2 launch transcend_bringup rover_pi.launch.xml
 ```
 
-This single command starts:
-- `robot_state_publisher`
-- `ros2_control` controller manager
-- `joint_state_broadcaster` + `diff_drive_controller`
-- YDLidar X2 scan driver
-- `micro_ros_agent` (UDP port 8888)
-
-### 6. Teleoperate the Rover
+### 6. Teleoperate
 
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
-```
-
-Or publish directly:
-```bash
-ros2 topic pub /cmd_vel geometry_msgs/msg/Twist \
-  "{linear: {x: 0.1}, angular: {z: 0.0}}"
 ```
 
 ### 7. Visualise in RViz2
@@ -295,34 +292,28 @@ ros2 topic pub /cmd_vel geometry_msgs/msg/Twist \
 rviz2 -d src/transcend_bringup/config/transcend_config.rviz
 ```
 
+### 8. ESP32 Firmware Upload
+
+1. Open `ESP32_Firmware/transcend_esp32_pid/transcend_esp32_pid.ino` in Arduino IDE
+2. Fill in your WiFi credentials at the top
+3. Select board: **ESP32 Dev Module** and your COM port
+4. Upload via USB (first time only — OTA after that)
+5. Open Serial Monitor at **115200 baud** to see the IP address
+6. Navigate to `http://[IP]` on any device on the same WiFi
+
 ---
 
 ## 🔑 Key Topics at Runtime
 
 | Topic | Type | Description |
 |-------|------|-------------|
-| `/cmd_vel` | `Twist` | Drive commands — input to diff_drive_controller |
+| `/cmd_vel` | `Twist` | Drive commands into diff_drive_controller |
 | `/wheel_vel_cmd` | `Float32MultiArray` | Per-wheel velocity targets → ESP32 |
 | `/wheel_vel_state` | `Float32MultiArray` | Per-wheel actual velocity ← ESP32 |
 | `/joint_states` | `JointState` | All 4 wheel positions + velocities |
 | `/odom` | `Odometry` | Wheel odometry from diff_drive_controller |
 | `/scan` | `LaserScan` | 360° LiDAR scan from YDLidar X2 |
-| `/tf` | `TFMessage` | Transform tree: odom → base_footprint → base_link |
-
----
-
-## 📚 Learning Outcomes (So Far)
-
-- ROS2 node, topic, service, and action architecture
-- Writing a custom `ros2_control` `SystemInterface` hardware plugin in C++
-- RT-safe threading patterns — separating real-time and DDS layers
-- URDF/xacro modelling with calculated inertia tensors
-- Differential drive kinematics (`wheel_separation`, `wheel_radius` tuning)
-- micro-ROS UDP transport — ESP32 as a first-class ROS2 node
-- Gazebo Harmonic simulation with ROS2 bridge
-- RViz2 configuration for robot visualisation
-- Ubuntu system administration and ROS2 workspace management
-- colcon build system and ament_cmake package structure
+| `/tf` | `TFMessage` | odom → base_footprint → base_link transform tree |
 
 ---
 
@@ -332,46 +323,61 @@ rviz2 -d src/transcend_bringup/config/transcend_config.rviz
 Transcend-Rover/
 │
 ├── README.md
-├── .gitignore
+├── LICENSE                          ← Apache 2.0
+├── .gitignore                       ← excludes build/, install/, log/
+├── CONTRIBUTING.md
+├── .github/
+│   └── ISSUE_TEMPLATE/
 │
 ├── src/
-│   ├── transcend_description/          ← Robot URDF model
-│   │   ├── package.xml
-│   │   ├── CMakeLists.txt
-│   │   ├── meshes/
-│   │   └── urdf/
-│   │       ├── rover.urdf.xacro        ← Top-level robot file
-│   │       ├── mobile_base.xacro       ← Geometry + joints + inertia
-│   │       ├── common_properties.xacro ← Inertia macros + materials
-│   │       ├── rover_gaz.xacro         ← Gazebo plugins
-│   │       └── ros2_control_snippet.xacro
+│   ├── transcend_description/       ← URDF/xacro robot model
+│   │   ├── urdf/
+│   │   │   ├── rover.urdf.xacro
+│   │   │   ├── mobile_base.xacro
+│   │   │   ├── common_properties.xacro
+│   │   │   ├── rover_gaz.xacro
+│   │   │   └── ros2_control_snippet.xacro
+│   │   └── meshes/
 │   │
-│   ├── transcend_hardware/             ← ros2_control hardware plugin (C++)
-│   │   ├── package.xml
-│   │   ├── CMakeLists.txt
-│   │   ├── WheelVelocity.msg
-│   │   ├── transcend_hardware_plugin.xml
-│   │   ├── include/
-│   │   │   └── transcend_hardware_interface.hpp
-│   │   └── src/
-│   │       └── transcend_hardware_interface.cpp
+│   ├── transcend_hardware/          ← C++ ros2_control plugin (RT-safe)
+│   │   ├── include/transcend_hardware_interface.hpp
+│   │   ├── src/transcend_hardware_interface.cpp
+│   │   └── WheelVelocity.msg
 │   │
-│   └── transcend_bringup/              ← Launch files + config
-│       ├── package.xml
-│       ├── CMakeLists.txt
-│       ├── launch/
-│       │   └── rover_pi.launch.xml     ← Single launch for full stack
+│   └── transcend_bringup/           ← Launch files + all config
+│       ├── launch/rover_pi.launch.xml
 │       └── config/
 │           ├── transcend_controllers.yaml
 │           ├── ydlidar_x4.yaml
 │           ├── gazebo_bridge.yaml
 │           └── transcend_config.rviz
 │
-├── Images/                             ← Add rover photos + screenshots here
+├── ESP32_Firmware/
+│   └── transcend_esp32_pid/
+│       └── transcend_esp32_pid.ino  ← ESP32 PID + WiFi + OTA firmware
+│
+├── Images/                          ← Add rover photos + screenshots
 │
 └── Docs/
-    └── PHASES.md                       ← Development phase tracker
+    └── PHASES.md                    ← 10-phase development tracker
 ```
+
+---
+
+## 📚 Learning Outcomes (So Far)
+
+- ROS2 node, topic, service, and action architecture
+- Writing a custom `ros2_control` `SystemInterface` plugin in C++
+- RT-safe threading — separating real-time and DDS I/O layers
+- URDF/xacro modelling with calculated inertia tensors
+- Differential drive kinematics — `wheel_separation` and `wheel_radius` tuning
+- micro-ROS UDP transport — ESP32 as a first-class ROS2 node
+- Gazebo Harmonic simulation with ROS2 bridge
+- RViz2 visualisation configuration
+- Ubuntu system administration and workspace management
+- colcon build system and ament_cmake package structure
+- PID controller implementation with anti-windup (ESP32)
+- WiFi HTTP server and OTA firmware updates (ESP32)
 
 ---
 
@@ -379,18 +385,16 @@ Transcend-Rover/
 
 See [`Docs/PHASES.md`](Docs/PHASES.md) for the full detailed phase breakdown.
 
-Short version:
-- **Next:** Complete Gazebo LiDAR simulation → Nav2 integration → SLAM mapping
-- **Goal:** Fully autonomous rover that detects doom-scrolling and enforces your schedule
+**Current focus:** Getting the full hardware stack (Pi 4B + ESP32 + LiDAR) running reliably together on the real rover before moving to SLAM and Nav2.
 
 ---
 
 ## 👤 Author
 
 **Mayank Jain**
-IoT, Robotics and Automation Enthusiast — B.Tech Robotics & Automation, Bharati Vidyapeeth, Pune
+Robotics and Automation Engineer — B.Tech, Bharati Vidyapeeth (Deemed to be University), Pune
 
-> *ROS2 architecture, hardware interface plugin, URDF modelling, hardware build — all designed and implemented from scratch.*
+> *ROS2 architecture, hardware interface plugin, URDF modelling, Gazebo simulation, ESP32 firmware, physical hardware build — all designed and built from scratch.*
 
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/YOUR_USERNAME)
 
